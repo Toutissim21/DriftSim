@@ -13,23 +13,19 @@ public class Vector {
 
     public void subXY(double amount){
 
-        long longx = Math.round(x);
-
-        long longy = Math.round(y);
-
-        if(longx > 0){
+        if(x > 0){
             x -= amount;
-        }else if(longx < 0){
+        }else if(x < 0){
             x += amount;
         }
-        if(longy > 0){
+        if(y > 0){
             y -= amount;
-        }else if(longy < 0){
+        }else if(y < 0){
             y += amount;
         }
     }
     public void add(Vector vector){
-        x += vector.x;
-        y += vector.y;
+            x += vector.x;
+            y += vector.y;
     }
 }
