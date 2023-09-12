@@ -10,22 +10,10 @@ public class Vector {
         x = x_;
         y = y_;
     }
-
-    public void subXY(double amount){
-
-        if(x > 0){
-            x -= amount;
-        }else if(x < 0){
-            x += amount;
-        }
-        if(y > 0){
-            y -= amount;
-        }else if(y < 0){
-            y += amount;
-        }
+    public double norm(){
+        return Math.sqrt(x*x + y*y);
     }
-    public void add(Vector vector){
-            x += vector.x;
-            y += vector.y;
+    public Vector unitVector(){
+        return new Vector(x/norm(), y/norm());
     }
 }

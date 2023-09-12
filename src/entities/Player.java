@@ -9,7 +9,7 @@ public class Player {
     private final static Dimension size = new Dimension(10, 10);
 
     public Dimension pos;
-    public static final int WHEIGHT = 50;
+    public static final int WHEIGHT = 10;
 
     public static final double static_friction_coef = 0.02;
 
@@ -18,13 +18,10 @@ public class Player {
     private final static double maxfriction = WHEIGHT*static_friction_coef;
     private Vector friction = new Vector(0, 0);
 
-    private final static double maxTrust = maxfriction;
+    private final static double maxTrust = 1;
     private Vector trust = new Vector(0, 0);
 
     private int angle = 0;
-
-    double temp_x = 0;
-    double temp_y = 0;
 
     public Player(){
          pos = new Dimension(0, 20);
@@ -33,45 +30,22 @@ public class Player {
 
     public void paint(Graphics g){
         g.setColor(new Color(0, 255, 0));
-        g.drawLine(pos.width + size.width/2, pos.height + size.height/2, (int) (pos.width + size.width/2 + trust.x), (int) (pos.height + size.height/2 + trust.y));
+        g.drawLine(pos.width + size.width/2, pos.height + size.height/2, (int) (pos.width + size.width/2 + trust.x*10), (int) (pos.height + size.height/2 + trust.y*10));
+        g.setColor(new Color(0, 0, 255));
+        g.drawLine(pos.width + size.width/2, pos.height + size.height/2, (int) (pos.width + size.width/2 + velocity.x*2), (int) (pos.height + size.height/2 + velocity.y*2));
         g.setColor(new Color(255,0 ,0));
         g.fillRect(pos.width, pos.height, size.width, size.height);
 
-        double total_speed = velocity.x + velocity.y;
-        double x_coef = velocity.x/total_speed;
-        double y_coef = 1 - x_coef;
+        velocity.x -= friction.x;
+        velocity.y -= friction.y;
 
-        friction.x = maxfriction*x_coef;
-        friction.y = maxfriction*y_coef;
+        velocity.x += trust.x;
+        velocity.y += trust.y;
 
-        if(velocity.x != 0) {
-            velocity.x -= maxfriction;
-        }
-        if(velocity.y != 0) {
-            velocity.y -= maxfriction;
-        }
+        pos.width += velocity.x;
+        pos.height += velocity.y;
 
-        velocity.add(trust);
-
-
-        temp_x = velocity.x - (int)velocity.x;
-        temp_y = velocity.y - (int)velocity.y;
-
-        pos.width += (int)velocity.x;
-        pos.height += (int)velocity.y;
-
-        if(temp_x > 1){
-            pos.width += 1;
-            temp_x = 0;
-        }
-        if(temp_y > 1){
-            pos.height += 1;
-            temp_y = 0;
-        }
-
-        System.out.println(velocity.y);
-
-
+        System.out.println(friction.x + " | " + friction.y);
     }
 
     public void move(boolean e_pressed, boolean q_pressed){
@@ -92,8 +66,11 @@ public class Player {
         trust.x = Math.cos(angle*(Math.PI/180))*maxTrust;
         trust.y = Math.sin(angle*(Math.PI/180))*maxTrust;
 
-        friction.x = Math.cos(angle*(Math.PI/180))*maxfriction;
-        friction.y = Math.sin(angle*(Math.PI/180))*maxfriction;
+        Vector velocityUnitVector = velocity.unitVector();
+
+        friction.x = velocityUnitVector.x*maxfriction;
+        friction.y = velocityUnitVector.y*maxfriction;
+
 
     }
 
