@@ -9,7 +9,7 @@ public class Player {
     private final static Dimension size = new Dimension(10, 10);
 
     public Dimension pos;
-    public static final int WHEIGHT = 10;
+    public static final int WHEIGHT = 50;
 
     public static final double static_friction_coef = 0.02;
 
@@ -31,8 +31,8 @@ public class Player {
     public void paint(Graphics g){
         g.setColor(new Color(0, 255, 0));
         g.drawLine(pos.width + size.width/2, pos.height + size.height/2, (int) (pos.width + size.width/2 + trust.x*10), (int) (pos.height + size.height/2 + trust.y*10));
-        g.setColor(new Color(0, 0, 255));
-        g.drawLine(pos.width + size.width/2, pos.height + size.height/2, (int) (pos.width + size.width/2 + velocity.x*2), (int) (pos.height + size.height/2 + velocity.y*2));
+        //g.setColor(new Color(0, 0, 255));
+        //g.drawLine(pos.width + size.width/2, pos.height + size.height/2, (int) (pos.width + size.width/2 + velocity.x*2), (int) (pos.height + size.height/2 + velocity.y*2));
         g.setColor(new Color(255,0 ,0));
         g.fillRect(pos.width, pos.height, size.width, size.height);
 
@@ -45,20 +45,20 @@ public class Player {
         pos.width += velocity.x;
         pos.height += velocity.y;
 
-        System.out.println(friction.x + " | " + friction.y);
+
     }
 
     public void move(boolean e_pressed, boolean q_pressed){
         if(e_pressed){
             if(angle < 360){
-                angle += 2;
+                angle += 4;
             }else{
                 angle = 0;
             }
 
         }else if(q_pressed){
             if(angle > 0){
-                angle -= 2;
+                angle -= 4;
             }else{
                 angle = 360;
             }
@@ -68,10 +68,14 @@ public class Player {
 
         Vector velocityUnitVector = velocity.unitVector();
 
-        friction.x = velocityUnitVector.x*maxfriction;
-        friction.y = velocityUnitVector.y*maxfriction;
+        System.out.println(velocityUnitVector.x + " | " + velocityUnitVector.y);
 
+        friction.x = velocityUnitVector.x * maxfriction * absoluteValue(velocity.x) * 0.1;
+        friction.y = velocityUnitVector.y * maxfriction * absoluteValue(velocity.y) * 0.1;
 
+    }
+    public double absoluteValue(double nbr){
+        return Math.sqrt(nbr*nbr);
     }
 
 }
